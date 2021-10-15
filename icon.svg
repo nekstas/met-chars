@@ -1,0 +1,14 @@
+<!-- 
+	Цвет верхней левой части бабочки - #AF3DEB
+	Цвет верхней правой части бабочки - #4B69EB
+	Цвет середины бабочки - #FAFAF0
+	Цвет нижней левой части бабочки - #FFCD3C
+	Цвет нижней правой части бабочки - #FF7D3A
+-->
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+	<path d="M6,0 v8 h-6 v-5 q0,-3 3,-3 z" fill="#AF3DEB" />
+	<path d="M0,8 h6 v8 h-3 q-3,0 -3,-3 z" fill="#FFCD3C" />
+	<path d="M6,3 v10 h4 v-10 z" fill="#FFFAF0" />
+	<path d="M10,0 h3 q3,0 3,3 v5 h-6 z" fill="#4B69EB" />
+	<path d="M16,8 v5 q0,3 -3,3 h-3 v-8 z" fill="#FF7D3A" />
+</svg>

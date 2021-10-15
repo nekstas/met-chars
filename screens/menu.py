@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QWidget
 
 from common.utils import path_to_ui
 
 
-class MainWindow(QMainWindow):
+class MenuScreen(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi(path_to_ui('windows/main.ui'), self)
-        self.init_program()
+        uic.loadUi(path_to_ui('screens/menu.ui'), self)
+        self.init()
 
-    def init_program(self):
+    def init(self):
         pass
