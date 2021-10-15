@@ -12,8 +12,9 @@ class MainWindow(QMainWindow):
     main_layout: QVBoxLayout
     current_screen: Optional[QWidget]
 
-    def __init__(self):
+    def __init__(self, app):
         super().__init__()
+        self.app = app
         uic.loadUi(path_to_ui('main.ui'), self)
         self.init()
 
