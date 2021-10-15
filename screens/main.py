@@ -2,6 +2,8 @@
 # Автор: Некрасов Станислав
 from PyQt5.QtWidgets import QMainWindow
 
+from consts.consts import PROJECT_NAME
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -10,4 +12,4 @@ class MainWindow(QMainWindow):
 
     def init_program(self):
         self.setGeometry(400, 400, 400, 400)
-        self.setWindowTitle('Мой проект =)')
+        self.setWindowTitle(PROJECT_NAME)
