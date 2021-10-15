@@ -10,6 +10,6 @@ from screens.menu import MenuScreen
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.goto(MenuScreen)
+    window.goto(MenuScreen())
     window.show()
     sys.exit(app.exec())

@@ -20,9 +20,9 @@ class MainWindow(QMainWindow):
     def init(self):
         self.current_screen = None
 
-    def goto(self, screen, *args, **kwargs):
+    def goto(self, screen):
         self.clear_window()
-        self.current_screen = screen(*args, **kwargs)
+        self.current_screen = screen
         self.main_layout.addWidget(self.current_screen)
 
     def clear_window(self):
