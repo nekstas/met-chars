@@ -5,6 +5,7 @@ from typing import Optional
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
+from common import g
 from common.utils import path_to_ui
 
 
@@ -12,9 +13,9 @@ class MainWindow(QMainWindow):
     main_layout: QVBoxLayout
     current_screen: Optional[QWidget]
 
-    def __init__(self, app):
+    def __init__(self):
         super().__init__()
-        self.app = app
+        g.window = self
         uic.loadUi(path_to_ui('main.ui'), self)
         self.init()
 
