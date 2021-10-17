@@ -113,7 +113,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="author_label">
        <property name="font">
         <font>
          <family>Segoe UI</family>
