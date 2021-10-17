@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MetChars - Игра</string>
+   <string>MetChars - Настройки</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">

@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QWidget, QPushButton
 from common import g
 from common.utils import path_to_ui
 from screens.game import GameScreen
+from screens.options import OptionsScreen
 
 
 class MenuScreen(QWidget):
@@ -21,10 +22,15 @@ class MenuScreen(QWidget):
     def init(self):
         self.exit_btn.clicked.connect(self.on_exit)
         self.play_btn.clicked.connect(self.on_play)
+        self.options_btn.clicked.connect(self.on_options)
 
     @staticmethod
     def on_play():
         g.window.goto(GameScreen())
+
+    @staticmethod
+    def on_options():
+        g.window.goto(OptionsScreen())
 
     @staticmethod
     def on_exit():
