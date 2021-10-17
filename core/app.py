@@ -4,7 +4,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from base.main_window import MainWindow
+from core.main_window import MainWindow
 from common import g
 from screens.menu import MenuScreen
 
