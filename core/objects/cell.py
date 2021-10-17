@@ -6,10 +6,10 @@ from PyQt5.QtWidgets import QWidget
 from common.utils import path_to_ui
 
 
-class GameScreen(QWidget):
+class Cell(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/game.ui'), self)
+        uic.loadUi(path_to_ui('objects/cell.ui'), self)
         self.init()
 
     def init(self):

@@ -5,8 +5,8 @@ from PyQt5.QtWidgets import QWidget, QPushButton
 
 from common import g
 from common.utils import path_to_ui
-from screens.game import GameScreen
-from screens.options import OptionsScreen
+from core.screens.game import GameScreen
+from core.screens.options import OptionsScreen
 
 
 class MenuScreen(QWidget):

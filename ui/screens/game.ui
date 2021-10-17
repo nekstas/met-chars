@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>GameScreen</class>
+ <widget class="QWidget" name="GameScreen">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -107,14 +107,14 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="cells" native="true">
+      <widget class="QWidget" name="cells_widget" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>7</verstretch>
         </sizepolicy>
        </property>
-       <layout class="QGridLayout" name="gridLayout_2">
+       <layout class="QGridLayout" name="cells_layout">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -126,6 +126,9 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="bottomMargin">
          <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>10</number>
         </property>
        </layout>
       </widget>
