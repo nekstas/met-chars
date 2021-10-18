@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from PyQt5 import uic
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QGridLayout
 
 from common.consts import CELLS_V_COUNT, CELLS_H_COUNT
@@ -19,4 +20,5 @@ class GameScreen(QWidget):
     def init(self):
         for i in range(CELLS_V_COUNT):
             for j in range(CELLS_H_COUNT):
-                self.cells_layout.addWidget(Cell(), i, j)
+                cell = Cell()
+                self.cells_layout.addWidget(cell, i, j)
