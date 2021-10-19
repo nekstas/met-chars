@@ -52,7 +52,7 @@
      <property name="font">
       <font>
        <family>Segoe UI</family>
-       <pointsize>24</pointsize>
+       <pointsize>20</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -61,7 +61,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>+</string>
+      <string/>
      </property>
      <property name="autoDefault">
       <bool>false</bool>
