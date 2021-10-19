@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QGridLayout
 
 from common.consts import CELLS_V_COUNT, CELLS_H_COUNT
 from common.utils import path_to_ui
-from core.objects.cell import Cell
+from core.objects.cell import Cell, CellB
 
 
 class GameScreen(QWidget):
@@ -18,11 +18,11 @@ class GameScreen(QWidget):
 
     def init(self):
         cells_contents = [
-            [0, 0, 0, 0x365],
-            [0, 0, 0, 0x378],
-            [0, 0, 0, 0x359],
+            [0, 0, 0, 0x265 | CellB.ENABLED],
+            [0, 0, 0, 0x278 | CellB.ENABLED],
+            [0, 0, 0, 0x259 | CellB.ENABLED],
             [0, 0, 0, 0],
-            [0x301, 0x302, 0x303, 0x304],
+            [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x204 | CellB.ENABLED],
         ]
         for i in range(CELLS_V_COUNT):
             for j in range(CELLS_H_COUNT):
