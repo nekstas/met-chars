@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from PyQt5 import uic
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QPushButton
 
 from common.utils import path_to_ui
@@ -25,7 +26,6 @@ class Cell(QPushButton):
 
     def _set_enabled(self):
         self.enabled = bool(self.code & CellB.ENABLED)
-        self.setStyleSheet(CellS.CELL_BASE)
 
     def _set_char(self):
         self.char = ''
@@ -34,19 +34,31 @@ class Cell(QPushButton):
                 self.char += CellB.ACTION_CHARS[(self.code & CellB.L1) >> CellB.L1_SHIFT]
             if self.code & CellB.L2:
                 self.char += CellB.ACTION_CHARS[(self.code & CellB.L2) >> CellB.L2_SHIFT]
+        elif (self.code & CellB.TYPE) == CellB.NUMBER:
+            self.char = str(self.code & CellB.DATA)
+        elif (self.code & CellB.TYPE) == CellB.CHAR_RU:
+            self.char = CellB.RU_CHARS[(self.code & CellB.DATA) - 1]
+        elif (self.code & CellB.TYPE) == CellB.CHAR_EN:
+            self.char = CellB.EN_CHARS[(self.code & CellB.DATA) - 1]
 
         self.button.setText(self.char)
 
-    def _set_stylesheet(self):
-        stylesheet = CellS.CELL_BASE
+    def _set_style(self):
+        font = QFont('Segoe UI', CellS.FONT_SIZES[len(self.char)], 75)
+        font.setBold(True)
+        self.button.setFont(font)
+
+        stylesheet = CellS.BASE
         if self.enabled:
-            stylesheet += CellS.CELL_ENABLED
+            stylesheet += CellS.ENABLED
         else:
-            stylesheet += CellS.CELL_DISABLED
+            stylesheet += CellS.DISABLED
+
+        self.setStyleSheet(stylesheet)
         self.button.setStyleSheet(stylesheet)
 
     def set_code(self, code):
         self.code = code
         self._set_enabled()
         self._set_char()
-        self._set_stylesheet()
+        self._set_style()

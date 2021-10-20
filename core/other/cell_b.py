@@ -3,7 +3,10 @@
 
 
 class CellB:
-    ACTION_CHARS = ' +-*/ECRUN'
+    ACTION_CHARS = ' +−×÷%ECRUN'
+    # Можно было бы сделать через chr(), но так, кажется, лучше.
+    RU_CHARS = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+    EN_CHARS = 'abcdefghijklmnopqrstuvwxyz'
 
     DATA, IS_ENABLED, TYPE = 0xFF, 0x100, 0xE00
 

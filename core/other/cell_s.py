@@ -3,9 +3,10 @@
 
 
 class CellS:
-    CELL_BASE = '''border-radius: 15px;
-color: #fff;'''
-    CELL_ENABLED = '''background-color: #8a8eff;'''
-    CELL_DISABLED = '''background-color: #d3514b;'''
+    FONT_SIZES = [0, 28, 20, 16]
 
-    # background-color:#8a8eff;border-radius:10px;color:#fff
+    BASE = '''border-radius: 20px;
+color: #fff;
+text-transform: uppercase;'''
+    ENABLED = '''background-color: #8a8eff;'''
+    DISABLED = '''background-color: #d3514b;'''

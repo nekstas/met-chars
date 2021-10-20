@@ -18,10 +18,10 @@ class GameScreen(QWidget):
 
     def init(self):
         cells_contents = [
-            [0, 0, 0, 0x265 | CellB.ENABLED],
-            [0, 0, 0, 0x278 | CellB.ENABLED],
-            [0, 0, 0, 0x259 | CellB.ENABLED],
-            [0, 0, 0, 0],
+            [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, 0, 0x276 | CellB.ENABLED],
+            [0, 0, 0, 0x289 | CellB.ENABLED],
+            [0x801, 0x602, 0, 0x26a | CellB.ENABLED],
+            [0, 0x4ff, 0, 0x205 | CellB.ENABLED],
             [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x204 | CellB.ENABLED],
         ]
         for i in range(CELLS_V_COUNT):
