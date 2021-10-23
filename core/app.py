@@ -20,12 +20,11 @@ class App(QApplication):
 
     def init_db(self):
         g.db_conn = sqlite3.connect('db.sqlite')
+        self.create_tables()
 
     @staticmethod
     def create_tables():
         cur = g.db_conn.cursor()
-        cur.execute('''
-CREATE TABLE IF NOT EXISTS players (int id);''')
 
     def run(self):
         self.window = MainWindow()
