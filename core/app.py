@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
+import sqlite3
 import sys
 
 from PyQt5.QtWidgets import QApplication
@@ -14,10 +15,17 @@ class App(QApplication):
 
     def __init__(self):
         super().__init__(sys.argv)
+        self.init_db()
         g.app = self
+
+    def init_db(self):
+        g.db_conn = sqlite3.connect('db.sqlite')
 
     def run(self):
         self.window = MainWindow()
         self.window.goto(MenuScreen())
         self.window.show()
         sys.exit(self.exec())
+
+    def closeAllWindows(self):
+        g.db_conn.close()
