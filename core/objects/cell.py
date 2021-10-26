@@ -2,14 +2,14 @@
 # Автор: Некрасов Станислав
 from PyQt5 import uic
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QPushButton, QWidget
 
 from common.utils import path_to_ui
 from core.other.cell_b import CellB
 from core.other.cell_s import CellS
 
 
-class Cell(QPushButton):
+class Cell(QWidget):
     code: int
     char: str
     enabled: bool
