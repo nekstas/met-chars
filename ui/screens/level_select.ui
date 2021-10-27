@@ -38,11 +38,11 @@
       <number>10</number>
      </property>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="game_mode_label">
        <property name="font">
         <font>
          <family>Segoe UI</family>
-         <pointsize>16</pointsize>
+         <pointsize>14</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -137,7 +137,7 @@
           <x>0</x>
           <y>0</y>
           <width>358</width>
-          <height>436</height>
+          <height>442</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">

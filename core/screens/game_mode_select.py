@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton
 from common import g
 from common.utils import path_to_ui
 from core.objects.game_mode_item import GameModeItem
-from core.screens.level_select import LevelSelectScreen
+from core.screens.plot_level_select import PlotLevelSelectScreen
+from core.screens.random_level_select import RandomLevelSelectScreen
 
 
 class GameModeSelectScreen(QWidget):
@@ -40,11 +41,11 @@ class GameModeSelectScreen(QWidget):
 
     @staticmethod
     def go_plot_level_select():
-        g.window.goto(LevelSelectScreen())
+        g.window.goto(PlotLevelSelectScreen())
 
     @staticmethod
     def go_random_level_select():
-        g.window.goto(LevelSelectScreen())
+        g.window.goto(RandomLevelSelectScreen())
 
     @staticmethod
     def go_back():

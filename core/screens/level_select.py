@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QPushButton
+from PyQt5.QtWidgets import QWidget, QPushButton, QLabel
 
 from common import g
 from common.utils import path_to_ui
 
 
 class LevelSelectScreen(QWidget):
+    game_mode_label: QLabel
     go_back_btn: QPushButton
 
-    def __init__(self):
+    def __init__(self, title):
         super().__init__()
         uic.loadUi(path_to_ui('screens/level_select.ui'), self)
-        self.init()
+        self.init(title)
 
-    def init(self):
-        pass
+    def init(self, title):
+        self.game_mode_label.setText(title)
         self.go_back_btn.clicked.connect(self.go_back)
 
     @staticmethod
