@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
+import os
 import sqlite3
 import sys
 
 from PyQt5.QtWidgets import QApplication
 
+from common.consts import PATH_TO_USER_DATA, PLAYER_FILE
+from common.sql import SQL
+from common.utils import path_to_user_data
 from core.main_window import MainWindow
 from common import g
 from core.screens.menu import MenuScreen
@@ -15,16 +19,37 @@ class App(QApplication):
 
     def __init__(self):
         super().__init__(sys.argv)
-        self.init_db()
         g.app = self
+        self.init()
+
+    def init(self):
+        self.init_db()
+        self.load_user_data()
 
     def init_db(self):
         g.db_conn = sqlite3.connect('db.sqlite')
         self.create_tables()
 
     @staticmethod
+    def load_user_data():
+        if not os.path.exists(PATH_TO_USER_DATA):
+            os.mkdir(PATH_TO_USER_DATA)
+
+        if os.path.exists(path_to_user_data(PLAYER_FILE)):
+            with open(path_to_user_data(PLAYER_FILE)) as user_file:
+                player_id_str = user_file.readline().strip()
+                if player_id_str.isdigit():
+                    g.player_id = int(player_id_str)
+
+        print(g.player_id)
+
+    @staticmethod
     def create_tables():
         cur = g.db_conn.cursor()
+
+        cur.execute(SQL.CREATE_TABLE_PLAYERS)
+
+        g.db_conn.commit()
 
     def run(self):
         self.window = MainWindow()

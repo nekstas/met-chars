@@ -5,14 +5,13 @@ from PyQt5.QtWidgets import QWidget, QPushButton
 
 from common import g
 from common.utils import path_to_ui
-from core.screens.game import GameScreen
 from core.screens.game_mode_select import GameModeSelectScreen
-from core.screens.options import OptionsScreen
+from core.screens.players import PlayersScreen
 
 
 class MenuScreen(QWidget):
     exit_btn: QPushButton
-    options_btn: QPushButton
+    players_btn: QPushButton
     play_btn: QPushButton
 
     def __init__(self):
@@ -23,15 +22,15 @@ class MenuScreen(QWidget):
     def init(self):
         self.exit_btn.clicked.connect(self.on_exit)
         self.play_btn.clicked.connect(self.on_play)
-        self.options_btn.clicked.connect(self.on_options)
+        self.players_btn.clicked.connect(self.on_players)
 
     @staticmethod
     def on_play():
         g.window.goto(GameModeSelectScreen())
 
     @staticmethod
-    def on_options():
-        g.window.goto(OptionsScreen())
+    def on_players():
+        g.window.goto(PlayersScreen())
 
     @staticmethod
     def on_exit():

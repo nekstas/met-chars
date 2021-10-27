@@ -11,3 +11,4 @@ if TYPE_CHECKING:
 app: App
 window: MainWindow
 db_conn: Connection
+player_id = -1
