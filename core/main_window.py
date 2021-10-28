@@ -6,7 +6,9 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
 from common import g
+from common.sql import SQL
 from common.utils import path_to_ui
+from core.screens.players import PlayersScreen
 
 
 class MainWindow(QMainWindow):

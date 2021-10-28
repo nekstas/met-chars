@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from core.app import App
@@ -11,4 +11,5 @@ if TYPE_CHECKING:
 app: App
 window: MainWindow
 db_conn: Connection
-player_id = -1
+player_id: int = -1
+player_name: Optional[str] = None

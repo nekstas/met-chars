@@ -36,7 +36,7 @@ class App(QApplication):
             os.mkdir(PATH_TO_USER_DATA)
 
         if os.path.exists(path_to_user_data(PLAYER_FILE)):
-            with open(path_to_user_data(PLAYER_FILE)) as user_file:
+            with open(path_to_user_data(PLAYER_FILE), 'r') as user_file:
                 player_id_str = user_file.readline().strip()
                 if player_id_str.isdigit():
                     g.player_id = int(player_id_str)
