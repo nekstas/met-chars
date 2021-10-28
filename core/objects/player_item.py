@@ -44,6 +44,7 @@ class PlayerItem(QWidget):
         self.update_view()
 
         self.select_btn.clicked.connect(self.on_select_clicked)
+        self.change_name_btn.clicked.connect(self.on_change_name)
         self.delete_btn.clicked.connect(self.on_delete_clicked)
 
     def on_select_clicked(self):
@@ -55,6 +56,24 @@ class PlayerItem(QWidget):
         # PyQt почему-то тут не очень умный...
         # Поэтому приходится обновлять весь экран, а не два виджета
         g.window.goto(PlayersScreen())
+
+    def on_change_name(self):
+
+        from core.screens.players import PlayersScreen
+        cur = g.db_conn.cursor()
+        player_new_name, ok_pressed = PlayersScreen.request_player_name(
+            self, 'Введите новое имя для игрока:', False
+        )
+        if not ok_pressed:
+            return
+
+        cur.execute(SQL.CHANGE_PLAYER_NAME, (player_new_name, self.player_id, ))
+        g.db_conn.commit()
+
+        self.player_name = player_new_name
+        if self.player_id == g.player_id:
+            g.player_name = self.player_name
+        self.update_view()
 
     def on_delete_clicked(self):
         from core.screens.players import PlayersScreen

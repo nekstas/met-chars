@@ -36,15 +36,10 @@ class PlayersScreen(QWidget):
         players = cur.execute(SQL.GET_PLAYERS).fetchall()
         if players:
             for player in players:
-                player_item = PlayerItem(
-                    player[0], player[1],
-                )
+                player_item = PlayerItem(player[0], player[1])
                 self.players_layout.addWidget(player_item)
         else:
             print('Что-то пошло не так...')  # O_o
-
-    def create_player(self):
-        pass
 
     @staticmethod
     def go_back():
@@ -63,7 +58,9 @@ class PlayersScreen(QWidget):
                 widget, msg, message
             )
 
-            if not ok_pressed and ok_required:
+            if not ok_pressed:
+                if not ok_required:
+                    return player_name, ok_pressed
                 error = 'необходимо нажать кнопку ОК!'
             elif not player_name:
                 error = 'имя игрока не может быть пустым!'
@@ -95,3 +92,17 @@ class PlayersScreen(QWidget):
         g.player_name = new_player_name
         g.db_conn.commit()
         save_player()
+
+    def create_player(self):
+        cur = g.db_conn.cursor()
+        new_player_name, ok_pressed = PlayersScreen.request_player_name(
+            self, 'Введите имя нового игрока:', False
+        )
+        if not ok_pressed:
+            return
+
+        cur.execute(SQL.CREATE_NEW_PLAYER, (new_player_name, ))
+        g.db_conn.commit()
+
+        player_item = PlayerItem(cur.lastrowid, new_player_name)
+        self.players_layout.addWidget(player_item)

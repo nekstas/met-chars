@@ -10,16 +10,20 @@ class SQL:
         creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL 
     );'''
 
-    CREATE_NEW_PLAYER = f'''INSERT INTO 
+    CREATE_NEW_PLAYER = '''INSERT INTO 
         players (player_name)
         VALUES (?);'''
 
-    GET_PLAYER_NAME_BY_ID = f'''SELECT player_name
+    GET_PLAYER_NAME_BY_ID = '''SELECT player_name
         FROM players
         WHERE player_id=?;'''
 
-    GET_PLAYERS = f'''SELECT player_id, player_name
+    GET_PLAYERS = '''SELECT player_id, player_name
         FROM players;'''
 
-    DELETE_PLAYER = f'''DELETE FROM players
+    DELETE_PLAYER = '''DELETE FROM players
+        WHERE player_id=?;'''
+
+    CHANGE_PLAYER_NAME = '''UPDATE players
+        SET player_name=?
         WHERE player_id=?;'''
