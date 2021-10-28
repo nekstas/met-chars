@@ -46,6 +46,7 @@ class App(QApplication):
         cur = g.db_conn.cursor()
 
         cur.execute(SQL.CREATE_TABLE_PLAYERS)
+        cur.execute(SQL.CREATE_TABLE_COMPLETED_LEVELS)
 
         g.db_conn.commit()
 
