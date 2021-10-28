@@ -1,23 +1,58 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QInputDialog
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QInputDialog, QPushButton, QVBoxLayout
 
+from common import g
 from common.consts import PLAYER_NAME_MAX_LEN
+from common.save import save_player
+from common.sql import SQL
 from common.utils import path_to_ui
+from core.objects.player_item import PlayerItem
 
 
 class PlayersScreen(QWidget):
+    create_player_btn: QPushButton
+    go_back_btn: QPushButton
+    players_layout: QVBoxLayout
+
     def __init__(self):
-        super().__init__()
-        uic.loadUi(path_to_ui('screens/players.ui'), self)
-        self.init()
+        try:
+            super().__init__()
+            uic.loadUi(path_to_ui('screens/players'), self)
+            self.init()
+        except Exception as e:
+            print(e)
 
     def init(self):
+        self.create_player_btn.clicked.connect(self.create_player)
+        self.go_back_btn.clicked.connect(self.go_back)
+        self.players_layout.setAlignment(Qt.AlignTop)
+        self.show_players()
+
+    def show_players(self):
+        cur = g.db_conn.cursor()
+        players = cur.execute(SQL.GET_PLAYERS).fetchall()
+        if players:
+            for player in players:
+                player_item = PlayerItem(
+                    player[0], player[1],
+                )
+                self.players_layout.addWidget(player_item)
+        else:
+            print('Что-то пошло не так...')  # O_o
+
+    def create_player(self):
         pass
 
     @staticmethod
-    def request_player_name(widget, msg):
+    def go_back():
+        from core.screens.menu import MenuScreen
+        g.window.goto(MenuScreen())
+
+    @staticmethod
+    def request_player_name(widget, msg, ok_required=True):
         error = ''
         while True:
             message = msg
@@ -28,7 +63,7 @@ class PlayersScreen(QWidget):
                 widget, msg, message
             )
 
-            if not ok_pressed:
+            if not ok_pressed and ok_required:
                 error = 'необходимо нажать кнопку ОК!'
             elif not player_name:
                 error = 'имя игрока не может быть пустым!'
@@ -36,4 +71,27 @@ class PlayersScreen(QWidget):
                 error = f'имя игрока слишком длинное! ' \
                         f'(больше {PLAYER_NAME_MAX_LEN} символов)'
             else:
-                return player_name
+                return player_name, ok_pressed
+
+    @staticmethod
+    def find_player(widget):
+        if g.player_id != -1 and g.player_name is not None:
+            return
+
+        cur = g.db_conn.cursor()
+        if g.player_id != -1:
+            player = cur.execute(SQL.GET_PLAYER_NAME_BY_ID, (g.player_id,)).fetchone()
+            if player is None:
+                g.player_id = -1
+            else:
+                g.player_name = player[0]
+                return
+
+        new_player_name, _ = PlayersScreen.request_player_name(
+            widget, 'Как Вас называть?'
+        )
+        cur.execute(SQL.CREATE_NEW_PLAYER, (new_player_name,))
+        g.player_id = cur.lastrowid
+        g.player_name = new_player_name
+        g.db_conn.commit()
+        save_player()

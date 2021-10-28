@@ -16,7 +16,7 @@ class GameModeItem(QWidget):
 
     def __init__(self, title, description, on_select=None):
         super().__init__()
-        uic.loadUi(path_to_ui('objects/game_mode_item.ui'), self)
+        uic.loadUi(path_to_ui('objects/game_mode_item'), self)
         self.init(title, description, on_select)
 
     def init(self, title, description, on_select):

@@ -6,9 +6,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
 from common import g
-from common.sql import SQL
 from common.utils import path_to_ui
-from core.screens.players import PlayersScreen
 
 
 class MainWindow(QMainWindow):
@@ -18,7 +16,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         g.window = self
-        uic.loadUi(path_to_ui('main.ui'), self)
+        uic.loadUi(path_to_ui('main'), self)
         self.init()
 
     def init(self):

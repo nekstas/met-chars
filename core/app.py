@@ -41,8 +41,6 @@ class App(QApplication):
                 if player_id_str.isdigit():
                     g.player_id = int(player_id_str)
 
-        print(g.player_id)
-
     @staticmethod
     def create_tables():
         cur = g.db_conn.cursor()

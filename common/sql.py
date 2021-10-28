@@ -17,3 +17,9 @@ class SQL:
     GET_PLAYER_NAME_BY_ID = f'''SELECT player_name
         FROM players
         WHERE player_id=?;'''
+
+    GET_PLAYERS = f'''SELECT player_id, player_name
+        FROM players;'''
+
+    DELETE_PLAYER = f'''DELETE FROM players
+        WHERE player_id=?;'''

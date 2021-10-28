@@ -13,7 +13,7 @@ class GameScreen(QWidget):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/game.ui'), self)
+        uic.loadUi(path_to_ui('screens/game'), self)
         self.init()
 
     def init(self):

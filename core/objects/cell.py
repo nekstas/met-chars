@@ -18,7 +18,7 @@ class Cell(QWidget):
 
     def __init__(self, code):
         super().__init__()
-        uic.loadUi(path_to_ui('objects/cell.ui'), self)
+        uic.loadUi(path_to_ui('objects/cell'), self)
         self.init(code)
 
     def init(self, code):

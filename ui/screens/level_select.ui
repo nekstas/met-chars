@@ -140,7 +140,7 @@
           <height>442</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="levels_layout">
          <property name="spacing">
           <number>10</number>
          </property>
@@ -165,7 +165,7 @@
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
-         <verstretch>1</verstretch>
+         <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="font">

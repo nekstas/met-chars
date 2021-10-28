@@ -18,7 +18,7 @@ class GameModeSelectScreen(QWidget):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/game_mode_select.ui'), self)
+        uic.loadUi(path_to_ui('screens/game_mode_select'), self)
         self.init()
 
     def init(self):
