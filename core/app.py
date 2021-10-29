@@ -6,11 +6,11 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from common.consts import PATH_TO_USER_DATA, PLAYER_FILE
+from common import g
+from common.consts import PATH_TO_USER_DATA, PLAYER_FILE, DB_FILE
 from common.sql import SQL
 from common.utils import path_to_user_data
 from core.main_window import MainWindow
-from common import g
 from core.screens.menu import MenuScreen
 
 
@@ -27,7 +27,7 @@ class App(QApplication):
         self.load_user_data()
 
     def init_db(self):
-        g.db_conn = sqlite3.connect('db.sqlite')
+        g.db_conn = sqlite3.connect(path_to_user_data(DB_FILE))
         self.create_tables()
 
     @staticmethod

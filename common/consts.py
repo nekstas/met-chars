@@ -3,6 +3,7 @@
 
 PATH_TO_UI = './ui'
 PATH_TO_USER_DATA = './user_data'
+DB_FILE = 'db.sqlite'
 PLAYER_FILE = 'player.txt'
 PLAYER_NAME_MAX_LEN = 30
 WORD_MAX_LEN = 30

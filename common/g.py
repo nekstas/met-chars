@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from __future__ import annotations
+
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:

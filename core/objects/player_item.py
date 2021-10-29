@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
-from typing import Callable, Optional
 
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
