@@ -23,6 +23,9 @@ class App(QApplication):
         self.init()
 
     def init(self):
+        if not os.path.exists(PATH_TO_USER_DATA):
+            os.mkdir(PATH_TO_USER_DATA)
+
         self.init_db()
         self.load_user_data()
 
@@ -32,9 +35,6 @@ class App(QApplication):
 
     @staticmethod
     def load_user_data():
-        if not os.path.exists(PATH_TO_USER_DATA):
-            os.mkdir(PATH_TO_USER_DATA)
-
         if os.path.exists(path_to_user_data(PLAYER_FILE)):
             with open(path_to_user_data(PLAYER_FILE), 'r') as user_file:
                 player_id_str = user_file.readline().strip()
