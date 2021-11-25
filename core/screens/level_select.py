@@ -24,6 +24,8 @@ class LevelSelectScreen(QWidget):
     def init(self, title, get_levels_sql):
         self.get_levels_sql = get_levels_sql
         self.game_mode_label.setText(title)
+        self.continue_btn.clicked.connect(self.on_continue)
+        self.new_game_btn.clicked.connect(self.on_new_game)
         self.go_back_btn.clicked.connect(self.go_back)
         self.levels_layout.setAlignment(Qt.AlignTop)
         self.show_levels()
@@ -38,6 +40,12 @@ class LevelSelectScreen(QWidget):
                 pass
         else:
             self.continue_btn.hide()
+
+    def on_new_game(self):
+        ...
+
+    def on_continue(self):
+        ...
 
     @staticmethod
     def go_back():
