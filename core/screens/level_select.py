@@ -51,3 +51,9 @@ class LevelSelectScreen(QWidget):
     def go_back():
         from core.screens.game_mode_select import GameModeSelectScreen
         g.window.goto(GameModeSelectScreen())
+
+    def on_continue(self):
+        ...
+
+    def on_new_game(self):
+        ...
