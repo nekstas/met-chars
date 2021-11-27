@@ -119,8 +119,6 @@ class Cell(QWidget):
         return Cell(num | CellB.NUMBER | CellB.ENABLED)
 
     def __add__(self, cell2):
-        print(hex(self.code), self.get_num())
-        print(hex(cell2.code), cell2.get_num())
         return Cell.create_num(self.get_num() + cell2.get_num())
 
     def __sub__(self, cell2):
@@ -134,3 +132,6 @@ class Cell(QWidget):
 
     def __floordiv__(self, cell2):
         return Cell.create_num(self.get_num() // cell2.get_num())
+
+    def to_char(self, t):
+        return Cell(self.get_num() | t | CellB.ENABLED)

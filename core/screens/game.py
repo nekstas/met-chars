@@ -6,6 +6,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel
 
+from common import g
 from common.consts import CELLS_V_COUNT, CELLS_H_COUNT
 from common.utils import path_to_ui
 from core.data.words_list import WordsList
@@ -26,12 +27,17 @@ class GameScreen(QWidget):
     cell1: Optional[Cell]
     cell2: Optional[Cell]
     cell3: Optional[Cell]
-    zero_division_error: bool  # ZeroDivisionError
+    zero_division_error: bool
 
     def __init__(self, words_list, level_num):
         super().__init__()
         uic.loadUi(path_to_ui('screens/game'), self)
         self.init(words_list, level_num)
+
+    def check_level_end(self):
+        # TODO: сделать нормальное окончание уровня
+        if self.char_i == len(self.word):
+            g.window.goto(GameScreen(self.words_list, self.level_num + 1))
 
     def render_word(self):
         # Чтобы текст вертикально был в центре... нужно это
@@ -72,13 +78,23 @@ class GameScreen(QWidget):
         self.sub_display.setText(text)
 
     def create_board(self):
+        # cells_contents = [
+        #     [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
+        #     [0, 0, 0, 0x289 | CellB.ENABLED],
+        #     [0x601 | CellB.ENABLED, 0x602 | CellB.ENABLED, 0, 0x26a | CellB.ENABLED],
+        #     [0, 0x4ff, 0, 0x205 | CellB.ENABLED],
+        #     [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
+        # ]
+
         cells_contents = [
             [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
-            [0, 0, 0, 0x289 | CellB.ENABLED],
-            [0x601 | CellB.ENABLED, 0x602 | CellB.ENABLED, 0, 0x26a | CellB.ENABLED],
-            [0, 0x4ff, 0, 0x205 | CellB.ENABLED],
+            [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x289 | CellB.ENABLED],
+            [0, 0, 0, 0x26a | CellB.ENABLED],
+            [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x205 | CellB.ENABLED],
             [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
         ]
+        # TODO: сделать разное стартовое игровое поле для разных уровней из сюжетного режима
+
         for i in range(CELLS_V_COUNT):
             for j in range(CELLS_H_COUNT):
                 cell = Cell(cells_contents[i][j], self.on_cell_clicked)
@@ -95,7 +111,7 @@ class GameScreen(QWidget):
             self.char_ok = False
 
         self.render_word()
-        # TODO: проверить окончание уровня
+        self.check_level_end()
 
     def on_cell_num_clicked(self, cell):
         if self.cell1 is None:
@@ -112,8 +128,14 @@ class GameScreen(QWidget):
     def on_cell_not_act_clicked(self, cell):
         if self.cell1 is None and cell.is_letter():
             self.on_cell_char_clicked(cell)
-        if self.cell3 is None and cell.is_num():
+        elif self.cell3 is None and cell.is_num():
             self.on_cell_num_clicked(cell)
+        elif self.cell3 is not None:
+            new_cell = self.cell2.process(self.cell1, self.cell3)
+            self.cell1 = self.cell2 = self.cell3 = None
+            new_cell.bind_on_clicked(self.on_cell_clicked)
+            self.cells_layout.replaceWidget(cell, new_cell)
+            self.render_preview()
 
     def on_cell_act_clicked(self, cell):
         if cell.get_act() in {'+', '−', '×', '//', "%"}:
@@ -122,6 +144,17 @@ class GameScreen(QWidget):
         elif cell.get_act() == 'CE':
             self.cell1 = self.cell2 = self.cell3 = None
             self.zero_division_error = False
+        elif self.cell1 is not None and self.cell2 is None:
+            new_cell = None
+            if cell.get_act() == 'RU':
+                new_cell = self.cell1.to_char(CellB.CHAR_RU)
+            elif cell.get_act() == 'EN':
+                new_cell = self.cell1.to_char(CellB.CHAR_EN)
+
+            if new_cell is not None:
+                new_cell.bind_on_clicked(self.on_cell_clicked)
+                self.cells_layout.replaceWidget(self.cell1, new_cell)
+                self.cell1 = None
 
         self.render_preview()
 
