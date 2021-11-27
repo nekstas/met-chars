@@ -69,6 +69,15 @@
             <pointsize>16</pointsize>
            </font>
           </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -94,6 +103,9 @@ p, li { white-space: pre-wrap; }
             <family>Segoe UI</family>
             <pointsize>12</pointsize>
            </font>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
           </property>
           <property name="text">
            <string/>

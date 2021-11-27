@@ -15,4 +15,4 @@ class PlotLevelSelectScreen(LevelSelectScreen):
         )
 
     def on_new_game(self):
-        g.window.goto(GameScreen(PlotWordsList()))
+        g.window.goto(GameScreen(PlotWordsList(), 1))

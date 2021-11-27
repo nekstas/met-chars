@@ -25,4 +25,4 @@ class RandomLevelSelectScreen(LevelSelectScreen):
 
     def on_new_game(self):
         self.regen_player_rnd()
-        g.window.goto(GameScreen(RandomWordsList()))
+        g.window.goto(GameScreen(RandomWordsList(), 1))
