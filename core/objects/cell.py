@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
+from __future__ import annotations
+
 from PyQt5 import uic
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QPushButton, QWidget
@@ -10,19 +12,54 @@ from core.other.cell_s import CellS
 
 
 class Cell(QWidget):
+    button: QPushButton
+
     code: int
     char: str
     enabled: bool
 
-    button: QPushButton
-
-    def __init__(self, code):
+    def __init__(self, code, on_clicked=None):
         super().__init__()
         uic.loadUi(path_to_ui('objects/cell'), self)
-        self.init(code)
+        self.init(code, on_clicked)
 
-    def init(self, code):
+    def init(self, code, on_clicked):
+        if on_clicked is not None:
+            self.button.clicked.connect(lambda: on_clicked(self))
         self.set_code(code)
+
+    def bind_on_clicked(self, on_clicked):
+        self.button.clicked.connect(lambda: on_clicked(self))
+
+    def get_type(self):
+        return self.code & CellB.TYPE
+
+    def is_free(self):
+        return self.get_type() == CellB.FREE
+
+    def is_act(self):
+        return self.get_type() == CellB.ACTION
+
+    def is_enabled(self):
+        return self.enabled
+
+    def is_letter(self):
+        return self.get_type() in {CellB.CHAR_RU, CellB.CHAR_EN}
+
+    def is_num(self):
+        return self.get_type() == CellB.NUMBER
+
+    def get_num(self):
+        return self.code & CellB.DATA
+
+    def has_data(self):
+        return not self.is_free() and not self.is_act()
+
+    def get_char(self):
+        return self.char.lower()
+
+    def get_act(self):
+        return self.char
 
     def _set_enabled(self):
         self.enabled = bool(self.code & CellB.ENABLED)
@@ -62,3 +99,38 @@ class Cell(QWidget):
         self._set_enabled()
         self._set_char()
         self._set_style()
+
+    def process(self, cell1, cell2):
+        if self.get_act() == '+':
+            return cell1 + cell2
+        elif self.get_act() == '−':
+            return cell1 - cell2
+        elif self.get_act() == '×':
+            return cell1 * cell2
+        elif self.get_act() == '//':
+            return cell1 // cell2
+        elif self.get_act() == '%':
+            return cell1 % cell2
+        # o_O
+
+    @staticmethod
+    def create_num(num):
+        num %= 256
+        return Cell(num | CellB.NUMBER | CellB.ENABLED)
+
+    def __add__(self, cell2):
+        print(hex(self.code), self.get_num())
+        print(hex(cell2.code), cell2.get_num())
+        return Cell.create_num(self.get_num() + cell2.get_num())
+
+    def __sub__(self, cell2):
+        return Cell.create_num(self.get_num() - cell2.get_num())
+
+    def __mul__(self, cell2):
+        return Cell.create_num(self.get_num() * cell2.get_num())
+
+    def __mod__(self, cell2):
+        return Cell.create_num(self.get_num() % cell2.get_num())
+
+    def __floordiv__(self, cell2):
+        return Cell.create_num(self.get_num() // cell2.get_num())
