@@ -2,6 +2,7 @@
 # Автор: Некрасов Станислав
 from common import g
 from common.sql import SQL
+from core.data.plot_words_list import PlotWordsList
 from core.screens.game import GameScreen
 from core.screens.level_select import LevelSelectScreen
 
@@ -14,4 +15,4 @@ class PlotLevelSelectScreen(LevelSelectScreen):
         )
 
     def on_new_game(self):
-        g.window.goto(GameScreen())
+        g.window.goto(GameScreen(PlotWordsList()))

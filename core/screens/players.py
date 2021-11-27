@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
+import random
+
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QInputDialog, QPushButton, QVBoxLayout
@@ -36,7 +38,7 @@ class PlayersScreen(QWidget):
         players = cur.execute(SQL.GET_PLAYERS).fetchall()
         if players:
             for player in players:
-                player_item = PlayerItem(player[0], player[1])
+                player_item = PlayerItem(player[0], player[1], player[2])
                 self.players_layout.addWidget(player_item)
         else:
             print('Что-то пошло не так...')  # O_o
@@ -82,12 +84,14 @@ class PlayersScreen(QWidget):
                 g.player_id = -1
             else:
                 g.player_name = player[0]
+                g.player_rnd = player[1]
                 return
 
         new_player_name, _ = PlayersScreen.request_player_name(
             widget, 'Как Вас называть?'
         )
-        cur.execute(SQL.CREATE_NEW_PLAYER, (new_player_name,))
+        new_player_rnd = random.randint(1, 10 ** 9)
+        cur.execute(SQL.CREATE_NEW_PLAYER, (new_player_name, new_player_rnd))
         g.player_id = cur.lastrowid
         g.player_name = new_player_name
         g.db_conn.commit()
@@ -101,8 +105,9 @@ class PlayersScreen(QWidget):
         if not ok_pressed:
             return
 
-        cur.execute(SQL.CREATE_NEW_PLAYER, (new_player_name, ))
+        new_player_rnd = random.randint(1, 10 ** 9)
+        cur.execute(SQL.CREATE_NEW_PLAYER, (new_player_name, new_player_rnd))
         g.db_conn.commit()
 
-        player_item = PlayerItem(cur.lastrowid, new_player_name)
+        player_item = PlayerItem(cur.lastrowid, new_player_name, new_player_rnd)
         self.players_layout.addWidget(player_item)

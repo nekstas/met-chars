@@ -14,3 +14,4 @@ window: MainWindow
 db_conn: Connection
 player_id: int = -1
 player_name: Optional[str] = None
+player_rnd: int = 0

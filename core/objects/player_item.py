@@ -13,6 +13,7 @@ from common.utils import path_to_ui
 class PlayerItem(QWidget):
     player_id: int
     player_name: str
+    player_rnd: int
 
     player_name_label: QLabel
     selected_label: QLabel
@@ -20,10 +21,10 @@ class PlayerItem(QWidget):
     change_name_btn: QPushButton
     delete_btn: QPushButton
 
-    def __init__(self, player_id, player_name):
+    def __init__(self, player_id, player_name, player_rnd):
         super().__init__()
         uic.loadUi(path_to_ui('objects/player_item'), self)
-        self.init(player_id, player_name)
+        self.init(player_id, player_name, player_rnd)
 
     def update_view(self):
         self.player_name_label.setText(self.player_name)
@@ -36,9 +37,10 @@ class PlayerItem(QWidget):
             self.select_btn.show()
             self.delete_btn.show()
 
-    def init(self, player_id, player_name):
+    def init(self, player_id, player_name, player_rnd):
         self.player_id = player_id
         self.player_name = player_name
+        self.player_rnd = player_rnd
 
         self.update_view()
 
@@ -50,6 +52,7 @@ class PlayerItem(QWidget):
         from core.screens.players import PlayersScreen
         g.player_id = self.player_id
         g.player_name = self.player_name
+        g.player_rnd = self.player_rnd
         save_player()
 
         # PyQt почему-то тут не очень умный...

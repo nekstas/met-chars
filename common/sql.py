@@ -8,6 +8,7 @@ class SQL:
     CREATE_TABLE_PLAYERS = f'''CREATE TABLE IF NOT EXISTS players (
         player_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         player_name VARCHAR({PLAYER_NAME_MAX_LEN}) NOT NULL,
+        player_rnd INTEGER NOT NULL,
         creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL 
     );'''
 
@@ -26,14 +27,14 @@ class SQL:
 
     # Действия с игроками
     CREATE_NEW_PLAYER = '''INSERT INTO 
-        players (player_name)
-        VALUES (?);'''
+        players (player_name, player_rnd)
+        VALUES (?, ?);'''
 
-    GET_PLAYER_NAME_BY_ID = '''SELECT player_name
+    GET_PLAYER_NAME_BY_ID = '''SELECT player_name, player_rnd
         FROM players
         WHERE player_id=?;'''
 
-    GET_PLAYERS = '''SELECT player_id, player_name
+    GET_PLAYERS = '''SELECT player_id, player_name, player_rnd
         FROM players;'''
 
     DELETE_PLAYER = '''DELETE FROM players
@@ -41,6 +42,10 @@ class SQL:
 
     CHANGE_PLAYER_NAME = '''UPDATE players
         SET player_name=?
+        WHERE player_id=?;'''
+
+    CHANGE_PLAYER_RND = '''UPDATE players
+        SET player_rnd=?
         WHERE player_id=?;'''
 
     # Действия с пройденными уровнями
