@@ -13,3 +13,10 @@ def path_to_user_data(path):
 
 def path_to_program_data(path):
     return f'{PATH_TO_PROGRAM_DATA}/{path}'
+
+
+def format_time(time):
+    s = time % 60
+    m = time // 60 % 60
+    h = time // 3600
+    return f'{h // 10}{h % 10}:{m // 10}{m % 10}:{s // 10}{s % 10}'

@@ -50,13 +50,31 @@ class SQL:
 
     # Действия с пройденными уровнями
     GET_COMPLETED_PLOT_LEVELS_BY_PLAYER_ID = '''SELECT 
-        completed_level_id, level_num, level_word, best_moves_count, best_time
+            completed_level_id, level_num, level_word, best_moves_count, best_time
         FROM completed_levels
         WHERE level_game_mode='p' AND player_id=?
         ORDER BY level_num;'''
 
     GET_COMPLETED_RANDOM_LEVELS_BY_PLAYER_ID = '''SELECT 
-        completed_level_id, level_num, level_word, best_moves_count, best_time
+            completed_level_id, level_num, level_word, best_moves_count, best_time
         FROM completed_levels
-        WHERE level_game_mode='p' AND player_id=?
+        WHERE level_game_mode='r' AND player_id=?
         ORDER BY level_num;'''
+
+    ADD_COMPLETED_LEVEL = '''INSERT INTO 
+        completed_levels(
+            player_id, level_word, level_game_mode, level_num, 
+            best_moves_count, best_time
+        )
+        VALUES(?, ?, ?, ?, ?, ?);'''
+
+    UPDATE_COMPLETED_LEVEL = '''UPDATE completed_levels
+        SET 
+            best_moves_count=MIN(best_moves_count, ?),
+            best_time=MIN(best_time, ?)
+        WHERE
+            player_id=? AND level_num=? AND level_game_mode=?;'''
+
+    CHECK_COMPLETED_LEVEL = '''SELECT 1
+        FROM completed_levels
+        WHERE player_id=? AND level_num=? AND level_game_mode=?;'''

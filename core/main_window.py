@@ -23,6 +23,9 @@ class MainWindow(QMainWindow):
         self.current_screen = None
 
     def goto(self, screen):
+        if self.current_screen is not None:
+            self.current_screen.deleteLater()
+
         self.clear_window()
         self.current_screen = screen
         self.main_layout.addWidget(self.current_screen)

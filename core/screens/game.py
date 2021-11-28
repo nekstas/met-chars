@@ -5,11 +5,13 @@ from typing import Optional
 from pymorphy2 import MorphAnalyzer
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel
+from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel, QPushButton
 
 from common import g
 from common.consts import CELLS_V_COUNT, CELLS_H_COUNT
-from common.utils import path_to_ui
+from common.sql import SQL
+from common.utils import path_to_ui, format_time
+from core.data.plot_words_list import PlotWordsList
 from core.data.words_list import WordsList
 from core.objects.cell import Cell, CellB
 
@@ -20,7 +22,10 @@ class GameScreen(QWidget):
     sub_display: QLabel
     words_list: WordsList
     moves_count_label: QLabel
+    level_num_label: QLabel
     time_label: QLabel
+    go_back_btn: QPushButton
+    restart_level_btn: QPushButton
     level_timer: QTimer
 
     level_num: int
@@ -41,13 +46,45 @@ class GameScreen(QWidget):
         uic.loadUi(path_to_ui('screens/game'), self)
         self.init(words_list, level_num)
 
+    def save_level_completed(self):
+        cur = g.db_conn.cursor()
+        if isinstance(self.words_list, PlotWordsList):
+            level_game_mode = 'p'
+        else:
+            level_game_mode = 'r'
+
+        check_res = cur.execute(
+            SQL.CHECK_COMPLETED_LEVEL,
+            (g.player_id, self.level_num, level_game_mode)
+        ).fetchone()
+
+        if check_res is None:
+            cur.execute(
+                SQL.ADD_COMPLETED_LEVEL,
+                (
+                    g.player_id, self.word, level_game_mode, self.level_num,
+                    self.moves_count, self.time_seconds
+                )
+            )
+        else:
+            cur.execute(
+                SQL.UPDATE_COMPLETED_LEVEL,
+                (
+                    self.moves_count, self.time_seconds,
+                    g.player_id, self.level_num, level_game_mode
+                )
+            )
+
+        g.db_conn.commit()
+
     def check_level_end(self):
         if self.char_i != len(self.word):
             return
 
+        self.save_level_completed()
+
         # TODO: сделать нормальное окончание уровня
         g.window.goto(GameScreen(self.words_list, self.level_num + 1))
-        self.deleteLater()
 
     def render_word(self):
         # Чтобы текст вертикально был в центре... нужно это
@@ -92,11 +129,9 @@ class GameScreen(QWidget):
             make_agree_with_number(self.moves_count).word
         self.moves_count_label.setText(f'{self.moves_count} {move_word}')
 
-        s = self.time_seconds % 60
-        m = self.time_seconds // 60 % 60
-        h = self.time_seconds // 3600
-        time_str = f'{h // 10}{h % 10}:{m // 10}{m % 10}:{s // 10}{s % 10}'
-        self.time_label.setText(time_str)
+        self.level_num_label.setText(f'{self.level_num} уровень')
+
+        self.time_label.setText(format_time(self.time_seconds))
 
     def create_board(self):
         # cells_contents = [
@@ -198,6 +233,18 @@ class GameScreen(QWidget):
         self.time_seconds += 1
         self.render_status()
 
+    def go_back(self):
+        from core.screens.plot_level_select import PlotLevelSelectScreen
+        from core.screens.random_level_select import RandomLevelSelectScreen
+
+        if isinstance(self.words_list, PlotWordsList):
+            g.window.goto(PlotLevelSelectScreen())
+        else:
+            g.window.goto(RandomLevelSelectScreen())
+
+    def restart_level(self):
+        g.window.goto(GameScreen(self.words_list, self.level_num))
+
     def init(self, words_list, level_num):
         self.words_list = words_list
         self.level_num = level_num
@@ -210,6 +257,9 @@ class GameScreen(QWidget):
         self.char_ok = True
         self.cell1 = self.cell2 = self.cell3 = None
         self.zero_division_error = False
+
+        self.go_back_btn.clicked.connect(self.go_back)
+        self.restart_level_btn.clicked.connect(self.restart_level)
 
         # Чтобы текст нельзя было выделять...
         self.main_display.setTextInteractionFlags(Qt.NoTextInteraction)

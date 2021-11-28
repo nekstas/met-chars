@@ -15,4 +15,5 @@ class PlotLevelSelectScreen(LevelSelectScreen):
         )
 
     def on_new_game(self):
+        # TODO: сделать удаление записей из БД
         g.window.goto(GameScreen(PlotWordsList(), 1))

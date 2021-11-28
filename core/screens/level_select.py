@@ -41,12 +41,6 @@ class LevelSelectScreen(QWidget):
         else:
             self.continue_btn.hide()
 
-    def on_new_game(self):
-        ...
-
-    def on_continue(self):
-        ...
-
     @staticmethod
     def go_back():
         from core.screens.game_mode_select import GameModeSelectScreen
