@@ -2,8 +2,9 @@
 # Автор: Некрасов Станислав
 from typing import Optional
 
+from pymorphy2 import MorphAnalyzer
 from PyQt5 import uic
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel
 
 from common import g
@@ -18,9 +19,15 @@ class GameScreen(QWidget):
     main_display: QTextBrowser
     sub_display: QLabel
     words_list: WordsList
+    moves_count_label: QLabel
+    time_label: QLabel
+    level_timer: QTimer
+
     level_num: int
     word: str
     word_d: str
+    moves_count: int
+    time_seconds: int
 
     char_i: int
     char_ok: bool
@@ -35,9 +42,12 @@ class GameScreen(QWidget):
         self.init(words_list, level_num)
 
     def check_level_end(self):
+        if self.char_i != len(self.word):
+            return
+
         # TODO: сделать нормальное окончание уровня
-        if self.char_i == len(self.word):
-            g.window.goto(GameScreen(self.words_list, self.level_num + 1))
+        g.window.goto(GameScreen(self.words_list, self.level_num + 1))
+        self.deleteLater()
 
     def render_word(self):
         # Чтобы текст вертикально был в центре... нужно это
@@ -77,6 +87,17 @@ class GameScreen(QWidget):
         text = ' '.join(parts)
         self.sub_display.setText(text)
 
+    def render_status(self):
+        move_word = MorphAnalyzer().parse('ход')[0].\
+            make_agree_with_number(self.moves_count).word
+        self.moves_count_label.setText(f'{self.moves_count} {move_word}')
+
+        s = self.time_seconds % 60
+        m = self.time_seconds // 60 % 60
+        h = self.time_seconds // 3600
+        time_str = f'{h // 10}{h % 10}:{m // 10}{m % 10}:{s // 10}{s % 10}'
+        self.time_label.setText(time_str)
+
     def create_board(self):
         # cells_contents = [
         #     [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
@@ -104,6 +125,7 @@ class GameScreen(QWidget):
         if self.char_i >= len(self.word):
             return  # o_O
 
+        self.moves_count += 1
         if self.word[self.char_i] == cell.get_char():
             self.char_i += 1
             self.char_ok = True
@@ -111,6 +133,7 @@ class GameScreen(QWidget):
             self.char_ok = False
 
         self.render_word()
+        self.render_status()
         self.check_level_end()
 
     def on_cell_num_clicked(self, cell):
@@ -120,7 +143,7 @@ class GameScreen(QWidget):
             if self.cell2.get_act() in {'//', '%'} and cell.get_num() == 0:
                 self.zero_division_error = True
                 self.cell1 = self.cell2 = None
-            else:
+            elif self.cell1 != cell:
                 self.cell3 = cell
 
         self.render_preview()
@@ -131,11 +154,13 @@ class GameScreen(QWidget):
         elif self.cell3 is None and cell.is_num():
             self.on_cell_num_clicked(cell)
         elif self.cell3 is not None:
+            self.moves_count += 1
             new_cell = self.cell2.process(self.cell1, self.cell3)
             self.cell1 = self.cell2 = self.cell3 = None
             new_cell.bind_on_clicked(self.on_cell_clicked)
             self.cells_layout.replaceWidget(cell, new_cell)
             self.render_preview()
+            self.render_status()
 
     def on_cell_act_clicked(self, cell):
         if cell.get_act() in {'+', '−', '×', '//', "%"}:
@@ -152,11 +177,13 @@ class GameScreen(QWidget):
                 new_cell = self.cell1.to_char(CellB.CHAR_EN)
 
             if new_cell is not None:
+                self.moves_count += 1
                 new_cell.bind_on_clicked(self.on_cell_clicked)
                 self.cells_layout.replaceWidget(self.cell1, new_cell)
                 self.cell1 = None
 
         self.render_preview()
+        self.render_status()
 
     def on_cell_clicked(self, cell):
         if not cell.is_enabled():
@@ -167,11 +194,17 @@ class GameScreen(QWidget):
         else:
             self.on_cell_not_act_clicked(cell)
 
+    def every_second(self):
+        self.time_seconds += 1
+        self.render_status()
+
     def init(self, words_list, level_num):
         self.words_list = words_list
         self.level_num = level_num
         self.word = self.words_list.get_word(level_num)
         self.word_d = self.word.capitalize()
+        self.moves_count = 0
+        self.time_seconds = 0
 
         self.char_i = 0
         self.char_ok = True
@@ -181,5 +214,11 @@ class GameScreen(QWidget):
         # Чтобы текст нельзя было выделять...
         self.main_display.setTextInteractionFlags(Qt.NoTextInteraction)
 
+        self.level_timer = QTimer(self)
+        self.level_timer.timeout.connect(self.every_second)
+        self.level_timer.start(1000)
+
         self.render_word()
+        self.render_preview()
+        self.render_status()
         self.create_board()
