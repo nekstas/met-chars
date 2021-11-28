@@ -13,7 +13,7 @@ class RandomLevelSelectScreen(LevelSelectScreen):
     def __init__(self):
         super().__init__(
             title='Случайный режим',
-            get_levels_sql=SQL.GET_COMPLETED_PLOT_LEVELS_BY_PLAYER_ID
+            game_mode='r'
         )
 
     @staticmethod
@@ -23,6 +23,11 @@ class RandomLevelSelectScreen(LevelSelectScreen):
         cur.execute(SQL.CHANGE_PLAYER_RND, (g.player_rnd, g.player_id))
         g.db_conn.commit()
 
+    def on_continue(self):
+        # TODO: продумать ситуацию, когда уровни закончились
+        g.window.goto(GameScreen(RandomWordsList(), self.max_level + 1))
+
     def on_new_game(self):
+        self.delete_completed_levels()
         self.regen_player_rnd()
         g.window.goto(GameScreen(RandomWordsList(), 1))

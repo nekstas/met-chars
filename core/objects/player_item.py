@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
-
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
@@ -60,7 +59,6 @@ class PlayerItem(QWidget):
         g.window.goto(PlayersScreen())
 
     def on_change_name(self):
-
         from core.screens.players import PlayersScreen
         cur = g.db_conn.cursor()
         player_new_name, ok_pressed = PlayersScreen.request_player_name(

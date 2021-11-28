@@ -49,16 +49,10 @@ class SQL:
         WHERE player_id=?;'''
 
     # Действия с пройденными уровнями
-    GET_COMPLETED_PLOT_LEVELS_BY_PLAYER_ID = '''SELECT 
-            completed_level_id, level_num, level_word, best_moves_count, best_time
+    GET_COMPLETED_LEVELS = '''SELECT 
+            level_num, level_word, best_moves_count, best_time
         FROM completed_levels
-        WHERE level_game_mode='p' AND player_id=?
-        ORDER BY level_num;'''
-
-    GET_COMPLETED_RANDOM_LEVELS_BY_PLAYER_ID = '''SELECT 
-            completed_level_id, level_num, level_word, best_moves_count, best_time
-        FROM completed_levels
-        WHERE level_game_mode='r' AND player_id=?
+        WHERE player_id=? AND level_game_mode=?
         ORDER BY level_num;'''
 
     ADD_COMPLETED_LEVEL = '''INSERT INTO 
@@ -78,3 +72,6 @@ class SQL:
     CHECK_COMPLETED_LEVEL = '''SELECT 1
         FROM completed_levels
         WHERE player_id=? AND level_num=? AND level_game_mode=?;'''
+
+    DELETE_COMPLETED_LEVELS = '''DELETE FROM completed_levels
+        WHERE player_id=? AND level_game_mode=?;'''

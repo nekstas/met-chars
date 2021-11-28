@@ -2,7 +2,6 @@
 # Автор: Некрасов Станислав
 from typing import Optional
 
-from pymorphy2 import MorphAnalyzer
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel, QPushButton
@@ -10,7 +9,7 @@ from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel, QPushBut
 from common import g
 from common.consts import CELLS_V_COUNT, CELLS_H_COUNT
 from common.sql import SQL
-from common.utils import path_to_ui, format_time
+from common.utils import path_to_ui, format_time, format_moves_count
 from core.data.plot_words_list import PlotWordsList
 from core.data.words_list import WordsList
 from core.objects.cell import Cell, CellB
@@ -28,6 +27,7 @@ class GameScreen(QWidget):
     restart_level_btn: QPushButton
     level_timer: QTimer
 
+    game_mode: str
     level_num: int
     word: str
     word_d: str
@@ -48,21 +48,17 @@ class GameScreen(QWidget):
 
     def save_level_completed(self):
         cur = g.db_conn.cursor()
-        if isinstance(self.words_list, PlotWordsList):
-            level_game_mode = 'p'
-        else:
-            level_game_mode = 'r'
 
         check_res = cur.execute(
             SQL.CHECK_COMPLETED_LEVEL,
-            (g.player_id, self.level_num, level_game_mode)
+            (g.player_id, self.level_num, self.game_mode)
         ).fetchone()
 
         if check_res is None:
             cur.execute(
                 SQL.ADD_COMPLETED_LEVEL,
                 (
-                    g.player_id, self.word, level_game_mode, self.level_num,
+                    g.player_id, self.word, self.game_mode, self.level_num,
                     self.moves_count, self.time_seconds
                 )
             )
@@ -71,7 +67,7 @@ class GameScreen(QWidget):
                 SQL.UPDATE_COMPLETED_LEVEL,
                 (
                     self.moves_count, self.time_seconds,
-                    g.player_id, self.level_num, level_game_mode
+                    g.player_id, self.level_num, self.game_mode
                 )
             )
 
@@ -125,12 +121,8 @@ class GameScreen(QWidget):
         self.sub_display.setText(text)
 
     def render_status(self):
-        move_word = MorphAnalyzer().parse('ход')[0].\
-            make_agree_with_number(self.moves_count).word
-        self.moves_count_label.setText(f'{self.moves_count} {move_word}')
-
+        self.moves_count_label.setText(format_moves_count(self.moves_count))
         self.level_num_label.setText(f'{self.level_num} уровень')
-
         self.time_label.setText(format_time(self.time_seconds))
 
     def create_board(self):
@@ -237,7 +229,7 @@ class GameScreen(QWidget):
         from core.screens.plot_level_select import PlotLevelSelectScreen
         from core.screens.random_level_select import RandomLevelSelectScreen
 
-        if isinstance(self.words_list, PlotWordsList):
+        if self.game_mode == 'p':
             g.window.goto(PlotLevelSelectScreen())
         else:
             g.window.goto(RandomLevelSelectScreen())
@@ -247,6 +239,7 @@ class GameScreen(QWidget):
 
     def init(self, words_list, level_num):
         self.words_list = words_list
+        self.game_mode = 'p' if isinstance(self.words_list, PlotWordsList) else 'r'
         self.level_num = level_num
         self.word = self.words_list.get_word(level_num)
         self.word_d = self.word.capitalize()

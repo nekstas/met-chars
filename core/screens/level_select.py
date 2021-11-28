@@ -2,27 +2,33 @@
 # Автор: Некрасов Станислав
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QPushButton, QLabel
+from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QVBoxLayout
 
 from common import g
+from common.sql import SQL
 from common.utils import path_to_ui
+from core.objects.level_item import LevelItem
 
 
 class LevelSelectScreen(QWidget):
-    get_levels_sql: str
-
     game_mode_label: QLabel
     continue_btn: QPushButton
     new_game_btn: QPushButton
     go_back_btn: QPushButton
+    levels_layout: QVBoxLayout
 
-    def __init__(self, title, get_levels_sql):
+    game_mode: str
+    max_level: int
+
+    def __init__(self, title, game_mode):
         super().__init__()
         uic.loadUi(path_to_ui('screens/level_select'), self)
-        self.init(title, get_levels_sql)
+        self.init(title, game_mode)
 
-    def init(self, title, get_levels_sql):
-        self.get_levels_sql = get_levels_sql
+    def init(self, title, game_mode):
+        self.game_mode = game_mode
+        self.max_level = -1
+
         self.game_mode_label.setText(title)
         self.continue_btn.clicked.connect(self.on_continue)
         self.new_game_btn.clicked.connect(self.on_new_game)
@@ -32,14 +38,27 @@ class LevelSelectScreen(QWidget):
 
     def show_levels(self):
         cur = g.db_conn.cursor()
-        levels = cur.execute(self.get_levels_sql, (g.player_id, )).fetchall()
+        levels = cur.execute(
+            SQL.GET_COMPLETED_LEVELS,
+            (g.player_id, self.game_mode)
+        ).fetchall()
+
         if levels:
-            for level in levels:
-                # level_item = LevelItem(...)
-                # self.players_layout.addWidget(level_item)
-                pass
+            for level_num, level_word, level_best_moves, level_best_time in levels:
+                self.max_level = max(self.max_level, level_num)
+                level_item = LevelItem(
+                    level_num, level_word,
+                    level_best_moves, level_best_time,
+                    self.game_mode
+                )
+                self.levels_layout.addWidget(level_item)
         else:
             self.continue_btn.hide()
+
+    def delete_completed_levels(self):
+        cur = g.db_conn.cursor()
+        cur.execute(SQL.DELETE_COMPLETED_LEVELS, (g.player_id, self.game_mode))
+        g.db_conn.commit()
 
     @staticmethod
     def go_back():

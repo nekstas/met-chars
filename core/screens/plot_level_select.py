@@ -10,10 +10,13 @@ from core.screens.level_select import LevelSelectScreen
 class PlotLevelSelectScreen(LevelSelectScreen):
     def __init__(self):
         super().__init__(
-            title='Сюжетный режим',
-            get_levels_sql=SQL.GET_COMPLETED_PLOT_LEVELS_BY_PLAYER_ID
+            title='Сюжетный режим', game_mode='p'
         )
 
+    def on_continue(self):
+        # TODO: продумать ситуацию, когда уровни закончились
+        g.window.goto(GameScreen(PlotWordsList(), self.max_level + 1))
+
     def on_new_game(self):
-        # TODO: сделать удаление записей из БД
+        self.delete_completed_levels()
         g.window.goto(GameScreen(PlotWordsList(), 1))
