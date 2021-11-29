@@ -13,6 +13,7 @@ from common.utils import path_to_ui, format_time, format_moves_count
 from core.data.plot_words_list import PlotWordsList
 from core.data.words_list import WordsList
 from core.objects.cell import Cell, CellB
+from core.screens.between_levels_screen import BetweenLevelsScreen
 
 
 class GameScreen(QWidget):
@@ -79,8 +80,10 @@ class GameScreen(QWidget):
 
         self.save_level_completed()
 
-        # TODO: сделать нормальное окончание уровня
-        g.window.goto(GameScreen(self.words_list, self.level_num + 1))
+        g.window.goto(BetweenLevelsScreen(
+            self.words_list, self.level_num, self.game_mode,
+            self.moves_count, self.time_seconds,
+        ))
 
     def render_word(self):
         # Чтобы текст вертикально был в центре... нужно это

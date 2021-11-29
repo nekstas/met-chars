@@ -12,4 +12,5 @@ class WordsList:
             self.words = [*map(str.strip, words_file.readlines())]
 
     def get_word(self, i):
-        return self.words[i - 1].lower()
+        if i - 1 < len(self.words):
+            return self.words[i - 1].lower()

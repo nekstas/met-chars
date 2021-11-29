@@ -32,7 +32,7 @@ class GameModeSelectScreen(QWidget):
             title='Случайный режим',
             description='* Много слов.\n'
                         '* Случайный порядок слов.\n'
-                        '* Универсальое стартовое игровое поле для разных уровней.',
+                        '* Универсальное стартовое игровое поле для разных уровней.',
             on_select=self.go_random_level_select
         )
         self.game_modes_layout.addWidget(self.gm_plot)
