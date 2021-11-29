@@ -25,14 +25,14 @@ class GameModeSelectScreen(QWidget):
         self.gm_plot = GameModeItem(
             title='Сюжетный режим',
             description='* Определённый порядок слов, от простых к сложным.\n'
-                        '* Не все операции сразу доступны.',
+                        '* Разные стартовые игровые поля для разных уровней.',
             on_select=self.go_plot_level_select
         )
         self.gm_random = GameModeItem(
             title='Случайный режим',
             description='* Много слов.\n'
                         '* Случайный порядок слов.\n'
-                        '* Все операции сразу доступны.',
+                        '* Универсальое стартовое игровое поле для разных уровней.',
             on_select=self.go_random_level_select
         )
         self.game_modes_layout.addWidget(self.gm_plot)
