@@ -88,7 +88,7 @@ class GameScreen(QWidget):
         cur = g.db_conn.cursor()
 
         cur.execute(
-            SQL.ADD_LEVEL_STATISTICS,
+            SQL.ADD_WORD_STATISTICS,
             (
                 g.player_id, self.word, self.game_mode,
                 self.moves_count, self.time_seconds

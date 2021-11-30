@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 from common import g
 from common.utils import path_to_ui, format_moves_count, format_time, path_to_program_data
 from core.data.words_list import WordsList
+from core.screens.statistics import StatisticsScreen
 
 MEME_MAX_WIDTH = 340
 MEME_MAX_HEIGHT = 369
@@ -31,19 +32,26 @@ class BetweenLevelsScreen(QWidget):
     game_mode: str
     level_num: int
     word: str
+    moves_count: int
+    time_seconds: int
+    meme_i: int
     words_list: WordsList
 
-    def __init__(self, words_list, level_num, game_mode, moves_count, time_seconds):
+    def __init__(self, words_list, level_num, game_mode, moves_count, time_seconds,
+                 meme_i=-1):
         super().__init__()
         uic.loadUi(path_to_ui('screens/between_levels'), self)
-        self.init(words_list, level_num, game_mode, moves_count, time_seconds)
+        self.init(words_list, level_num, game_mode, moves_count, time_seconds, meme_i)
 
-    def init(self, words_list, level_num, game_mode, moves_count, time_seconds):
+    def init(self, words_list, level_num, game_mode, moves_count, time_seconds, meme_i):
         self.game_mode = game_mode
         self.level_num = level_num
         self.words_list = words_list
-        self.word = self.words_list.get_word(level_num)
+        self.moves_count = moves_count
+        self.time_seconds = time_seconds
+        self.meme_i = meme_i
 
+        self.word = self.words_list.get_word(level_num)
         self.word_label.setText(self.word.capitalize())
 
         self.moves_count_label.setText(format_moves_count(moves_count))
@@ -55,7 +63,9 @@ class BetweenLevelsScreen(QWidget):
         self.continue_btn.clicked.connect(self.continue_game)
         self.show_statistics_btn.clicked.connect(self.show_statistics)
 
-        meme_i = random.randint(0, MEMES_COUNT - 1)
+        if self.meme_i == -1:
+            self.meme_i = random.randint(0, MEMES_COUNT - 1)
+
         meme_pixmap = QPixmap(path_to_program_data(f'memes/{meme_i}.jpg'))
         meme_pixmap = meme_pixmap.scaled(
             MEME_MAX_WIDTH, MEME_MAX_HEIGHT, Qt.KeepAspectRatio
@@ -83,5 +93,9 @@ class BetweenLevelsScreen(QWidget):
         g.window.goto(GameScreen(self.words_list, self.level_num + 1))
 
     def show_statistics(self):
-        # TODO: показывать статистику по слову
-        pass
+        g.window.goto(StatisticsScreen(
+            self.game_mode, self.level_word,
+            BetweenLevelsScreen,
+            self.words_list, self.level_num, self.game_mode,
+            self.moves_count, self.time_seconds, self.meme_i
+        ))

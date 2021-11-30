@@ -25,11 +25,11 @@ class SQL:
         ON DELETE CASCADE ON UPDATE CASCADE
     );'''
 
-    CREATE_TABLE_LEVEL_STATISTICS = f'''CREATE TABLE IF NOT EXISTS level_statistics (
-        level_statistics_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    CREATE_TABLE_LEVEL_STATISTICS = f'''CREATE TABLE IF NOT EXISTS word_statistics (
+        word_statistics_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         player_id INTEGER NOT NULL,
-        level_word VARCHAR({WORD_MAX_LEN}) NOT NULL,
-        level_game_mode CHAR(1) NOT NULL,
+        word VARCHAR({WORD_MAX_LEN}) NOT NULL,
+        game_mode CHAR(1) NOT NULL,
         moves_count INTEGER NOT NULL,
         time_seconds INTEGER NOT NULL,
         creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -89,9 +89,43 @@ class SQL:
         WHERE player_id=? AND level_game_mode=?;'''
 
     # Действия со статистикой
-    ADD_LEVEL_STATISTICS = '''INSERT INTO 
-        level_statistics(
-            player_id, level_word, level_game_mode, 
+    ADD_WORD_STATISTICS = '''INSERT INTO 
+        word_statistics(
+            player_id, word, game_mode, 
             moves_count, time_seconds
         )
         VALUES(?, ?, ?, ?, ?);'''
+
+    GET_WORD_STATISTICS_ONLY_BEST_MOVES = '''SELECT 
+            player_name, MIN(moves_count), MIN(time_seconds)
+        FROM word_statistics JOIN players
+            ON word_statistics.player_id = players.player_id
+        WHERE game_mode=? AND word=?
+        GROUP BY players.player_id
+        ORDER BY moves_count
+    '''
+
+    GET_WORD_STATISTICS_ONLY_BEST_TIME = '''SELECT 
+            player_name, MIN(moves_count), MIN(time_seconds)
+        FROM word_statistics JOIN players
+            ON word_statistics.player_id = players.player_id
+        WHERE game_mode=? AND word=?
+        GROUP BY players.player_id
+        ORDER BY time_seconds
+    '''
+
+    GET_WORD_STATISTICS_MOVES = '''SELECT 
+            player_name, moves_count, time_seconds
+        FROM word_statistics JOIN players
+            ON word_statistics.player_id = players.player_id
+        WHERE game_mode=? AND word=?
+        ORDER BY moves_count
+    '''
+
+    GET_WORD_STATISTICS_TIME = '''SELECT 
+            player_name, moves_count, time_seconds
+        FROM word_statistics JOIN players
+            ON word_statistics.player_id = players.player_id
+        WHERE game_mode=? AND word=?
+        ORDER BY time_seconds
+    '''

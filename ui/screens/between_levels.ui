@@ -240,7 +240,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>Перезапустить</string>
+        <string>Переиграть</string>
        </property>
       </widget>
      </item>

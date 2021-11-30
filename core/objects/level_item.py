@@ -8,6 +8,7 @@ from common.utils import path_to_ui, format_moves_count, format_time
 from core.data.plot_words_list import PlotWordsList
 from core.data.random_words_list import RandomWordsList
 from core.screens.game import GameScreen
+from core.screens.statistics import StatisticsScreen
 
 
 class LevelItem(QWidget):
@@ -49,5 +50,9 @@ class LevelItem(QWidget):
             g.window.goto(GameScreen(RandomWordsList(), self.level_num))
 
     def show_statistics(self):
-        # TODO: показывать статистику
-        pass
+        from core.screens.plot_level_select import PlotLevelSelectScreen
+        from core.screens.random_level_select import RandomLevelSelectScreen
+        if self.game_mode == 'p':
+            g.window.goto(StatisticsScreen('p', self.level_word, PlotLevelSelectScreen))
+        else:
+            g.window.goto(StatisticsScreen('r', self.level_word, RandomLevelSelectScreen))
