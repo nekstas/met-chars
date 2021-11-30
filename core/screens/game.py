@@ -14,6 +14,7 @@ from core.data.plot_words_list import PlotWordsList
 from core.data.words_list import WordsList
 from core.objects.cell import Cell, CellB
 from core.screens.between_levels_screen import BetweenLevelsScreen
+from core.screens.game_over import GameOverScreen
 
 
 class GameScreen(QWidget):
@@ -244,7 +245,12 @@ class GameScreen(QWidget):
         self.words_list = words_list
         self.game_mode = 'p' if isinstance(self.words_list, PlotWordsList) else 'r'
         self.level_num = level_num
+
         self.word = self.words_list.get_word(level_num)
+        if self.word is None:
+            g.window.goto(GameOverScreen(self.game_mode), p=2)
+            return
+
         self.word_d = self.word.capitalize()
         self.moves_count = 0
         self.time_seconds = 0

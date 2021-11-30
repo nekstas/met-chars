@@ -25,7 +25,7 @@ class BetweenLevelsScreen(QWidget):
 
     def __init__(self, words_list, level_num, game_mode, moves_count, time_seconds):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/between_levels_screen'), self)
+        uic.loadUi(path_to_ui('screens/between_levels'), self)
         self.init(words_list, level_num, game_mode, moves_count, time_seconds)
 
     def init(self, words_list, level_num, game_mode, moves_count, time_seconds):

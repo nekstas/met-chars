@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GameModeSelectScreen</class>
- <widget class="QWidget" name="GameModeSelectScreen">
+ <class>BetweenLevelsScreen</class>
+ <widget class="QWidget" name="BetweenLevelsScreen">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -24,7 +24,6 @@ class RandomLevelSelectScreen(LevelSelectScreen):
         g.db_conn.commit()
 
     def on_continue(self):
-        # TODO: продумать ситуацию, когда уровни закончились
         g.window.goto(GameScreen(RandomWordsList(), self.max_level + 1))
 
     def on_new_game(self):

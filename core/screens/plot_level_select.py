@@ -14,7 +14,6 @@ class PlotLevelSelectScreen(LevelSelectScreen):
         )
 
     def on_continue(self):
-        # TODO: продумать ситуацию, когда уровни закончились
         g.window.goto(GameScreen(PlotWordsList(), self.max_level + 1))
 
     def on_new_game(self):
