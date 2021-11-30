@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
+import os
+import random
+
 from PyQt5 import uic
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
 from common import g
-from common.utils import path_to_ui, format_moves_count, format_time
+from common.utils import path_to_ui, format_moves_count, format_time, path_to_program_data
 from core.data.words_list import WordsList
+
+MEME_MAX_WIDTH = 340
+MEME_MAX_HEIGHT = 369
+MEMES_COUNT = len(os.listdir(path_to_program_data('memes/')))
 
 
 class BetweenLevelsScreen(QWidget):
@@ -17,6 +26,7 @@ class BetweenLevelsScreen(QWidget):
     restart_level_btn: QPushButton
     continue_btn: QPushButton
     show_statistics_btn: QPushButton
+    meme_label: QLabel
 
     game_mode: str
     level_num: int
@@ -44,6 +54,14 @@ class BetweenLevelsScreen(QWidget):
         self.restart_level_btn.clicked.connect(self.restart_level)
         self.continue_btn.clicked.connect(self.continue_game)
         self.show_statistics_btn.clicked.connect(self.show_statistics)
+
+        meme_i = random.randint(0, MEMES_COUNT - 1)
+        meme_pixmap = QPixmap(path_to_program_data(f'memes/{meme_i}.jpg'))
+        meme_pixmap = meme_pixmap.scaled(
+            MEME_MAX_WIDTH, MEME_MAX_HEIGHT, Qt.KeepAspectRatio
+        )
+
+        self.meme_label.setPixmap(meme_pixmap)
 
     def go_levels(self):
         from core.screens.plot_level_select import PlotLevelSelectScreen
