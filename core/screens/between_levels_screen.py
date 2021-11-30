@@ -66,7 +66,7 @@ class BetweenLevelsScreen(QWidget):
         if self.meme_i == -1:
             self.meme_i = random.randint(0, MEMES_COUNT - 1)
 
-        meme_pixmap = QPixmap(path_to_program_data(f'memes/{meme_i}.jpg'))
+        meme_pixmap = QPixmap(path_to_program_data(f'memes/{self.meme_i}.jpg'))
         meme_pixmap = meme_pixmap.scaled(
             MEME_MAX_WIDTH, MEME_MAX_HEIGHT, Qt.KeepAspectRatio
         )
@@ -94,7 +94,7 @@ class BetweenLevelsScreen(QWidget):
 
     def show_statistics(self):
         g.window.goto(StatisticsScreen(
-            self.game_mode, self.level_word,
+            self.game_mode, self.word,
             BetweenLevelsScreen,
             self.words_list, self.level_num, self.game_mode,
             self.moves_count, self.time_seconds, self.meme_i
