@@ -17,6 +17,15 @@ from core.screens.between_levels_screen import BetweenLevelsScreen
 from core.screens.game_over import GameOverScreen
 
 
+RANDOM_START_CELLS = [
+    [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
+    [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x289 | CellB.ENABLED],
+    [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x26a | CellB.ENABLED],
+    [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x205 | CellB.ENABLED],
+    [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED]
+]
+
+
 class GameScreen(QWidget):
     cells_layout: QGridLayout
     main_display: QTextBrowser
@@ -75,11 +84,25 @@ class GameScreen(QWidget):
 
         g.db_conn.commit()
 
+    def save_statistics(self):
+        cur = g.db_conn.cursor()
+
+        cur.execute(
+            SQL.ADD_LEVEL_STATISTICS,
+            (
+                g.player_id, self.word, self.game_mode,
+                self.moves_count, self.time_seconds
+            )
+        )
+
+        g.db_conn.commit()
+
     def check_level_end(self):
         if self.char_i != len(self.word):
             return
 
         self.save_level_completed()
+        self.save_statistics()
 
         g.window.goto(BetweenLevelsScreen(
             self.words_list, self.level_num, self.game_mode,
@@ -130,6 +153,16 @@ class GameScreen(QWidget):
         self.time_label.setText(format_time(self.time_seconds))
 
     def create_board(self):
+        if self.game_mode == 'r':
+            cells = RANDOM_START_CELLS
+        else:
+            cells = [
+                [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
+                [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x289 | CellB.ENABLED],
+                [0, 0, 0, 0x26a | CellB.ENABLED],
+                [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x205 | CellB.ENABLED],
+                [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
+            ]
         # cells_contents = [
         #     [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
         #     [0, 0, 0, 0x289 | CellB.ENABLED],
@@ -138,18 +171,11 @@ class GameScreen(QWidget):
         #     [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
         # ]
 
-        cells_contents = [
-            [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
-            [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x289 | CellB.ENABLED],
-            [0, 0, 0, 0x26a | CellB.ENABLED],
-            [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x205 | CellB.ENABLED],
-            [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
-        ]
         # TODO: сделать разное стартовое игровое поле для разных уровней из сюжетного режима
 
         for i in range(CELLS_V_COUNT):
             for j in range(CELLS_H_COUNT):
-                cell = Cell(cells_contents[i][j], self.on_cell_clicked)
+                cell = Cell(cells[i][j], self.on_cell_clicked)
                 self.cells_layout.addWidget(cell, i, j)
 
     def on_cell_char_clicked(self, cell):

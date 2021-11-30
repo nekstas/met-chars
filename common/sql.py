@@ -25,6 +25,18 @@ class SQL:
         ON DELETE CASCADE ON UPDATE CASCADE
     );'''
 
+    CREATE_TABLE_LEVEL_STATISTICS = f'''CREATE TABLE IF NOT EXISTS level_statistics (
+        level_statistics_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        player_id INTEGER NOT NULL,
+        level_word VARCHAR({WORD_MAX_LEN}) NOT NULL,
+        level_game_mode CHAR(1) NOT NULL,
+        moves_count INTEGER NOT NULL,
+        time_seconds INTEGER NOT NULL,
+        creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        FOREIGN KEY (player_id) REFERENCES players (player_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+    );'''
+
     # Действия с игроками
     CREATE_NEW_PLAYER = '''INSERT INTO 
         players (player_name, player_rnd)
@@ -75,3 +87,11 @@ class SQL:
 
     DELETE_COMPLETED_LEVELS = '''DELETE FROM completed_levels
         WHERE player_id=? AND level_game_mode=?;'''
+
+    # Действия со статистикой
+    ADD_LEVEL_STATISTICS = '''INSERT INTO 
+        level_statistics(
+            player_id, level_word, level_game_mode, 
+            moves_count, time_seconds
+        )
+        VALUES(?, ?, ?, ?, ?);'''

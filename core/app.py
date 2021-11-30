@@ -47,6 +47,7 @@ class App(QApplication):
 
         cur.execute(SQL.CREATE_TABLE_PLAYERS)
         cur.execute(SQL.CREATE_TABLE_COMPLETED_LEVELS)
+        cur.execute(SQL.CREATE_TABLE_LEVEL_STATISTICS)
 
         g.db_conn.commit()
 
