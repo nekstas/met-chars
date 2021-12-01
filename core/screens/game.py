@@ -163,6 +163,8 @@ class GameScreen(QWidget):
                 [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x205 | CellB.ENABLED],
                 [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
             ]
+
+        cells = RANDOM_START_CELLS
         # cells_contents = [
         #     [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
         #     [0, 0, 0, 0x289 | CellB.ENABLED],

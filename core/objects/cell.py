@@ -134,9 +134,11 @@ class Cell(QWidget):
         return Cell.create_num(self.get_num() // cell2.get_num())
 
     def to_char(self, t):
-        if t == CellB.CHAR_RU and self.get_num() >= len(CellB.RU_CHARS):
+        if t == CellB.CHAR_RU and (self.get_num() < 1 or
+                                   self.get_num() > len(CellB.RU_CHARS)):
             return
-        if t == CellB.CHAR_EN and self.get_num() >= len(CellB.EN_CHARS):
+        if t == CellB.CHAR_EN and (self.get_num() < 1 or
+                                   self.get_num() > len(CellB.EN_CHARS)):
             return
 
         return Cell(self.get_num() | t | CellB.ENABLED)
