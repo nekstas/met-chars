@@ -16,7 +16,8 @@ def path_to_program_data(path):
 
 
 def format_moves_count(moves_count):
-    move_word = MorphAnalyzer().parse('ход')[0]. \
+    morph_analyzer = MorphAnalyzer(path='pm_data/')
+    move_word = morph_analyzer.parse('ход')[0].\
         make_agree_with_number(moves_count).word
     return f'{moves_count} {move_word}'
 

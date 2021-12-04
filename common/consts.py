@@ -4,6 +4,7 @@ from core.other.cell_b import CellB
 
 PATH_TO_USER_DATA = './user_data'
 PATH_TO_PROGRAM_DATA = './data'
+PATH_TO_PY_MORPHY_DATA = './pm_data'
 DB_FILE = 'db.sqlite'
 PLAYER_FILE = 'player.txt'
 PLAYER_NAME_MAX_LEN = 30
