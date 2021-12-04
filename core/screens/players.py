@@ -2,7 +2,6 @@
 # Автор: Некрасов Станислав
 import random
 
-from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QInputDialog, QPushButton, QVBoxLayout
 
@@ -10,22 +9,19 @@ from common import g
 from common.consts import PLAYER_NAME_MAX_LEN
 from common.save import save_player
 from common.sql import SQL
-from common.utils import path_to_ui
 from core.objects.player_item import PlayerItem
+from ui.screens.players import Ui_PlayersScreen
 
 
-class PlayersScreen(QWidget):
+class PlayersScreen(QWidget, Ui_PlayersScreen):
     create_player_btn: QPushButton
     go_back_btn: QPushButton
     players_layout: QVBoxLayout
 
     def __init__(self):
-        try:
-            super().__init__()
-            uic.loadUi(path_to_ui('screens/players'), self)
-            self.init()
-        except Exception as e:
-            print(e)
+        super().__init__()
+        self.setupUi(self)
+        self.init()
 
     def init(self):
         self.create_player_btn.clicked.connect(self.create_player)

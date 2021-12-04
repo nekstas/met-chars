@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
-from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
 from common import g
-from common.utils import path_to_ui
+from ui.screens.game_over import Ui_GameOverScreen
 
 
-class GameOverScreen(QWidget):
+class GameOverScreen(QWidget, Ui_GameOverScreen):
     game_over_text_label: QLabel
     go_levels_btn: QPushButton
     exit_btn: QPushButton
@@ -16,7 +15,7 @@ class GameOverScreen(QWidget):
 
     def __init__(self, game_mode):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/game_over'), self)
+        self.setupUi(self)
         self.init(game_mode)
 
     def init(self, game_mode):

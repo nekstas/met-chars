@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
-from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
 from common import g
-from common.utils import path_to_ui, format_moves_count, format_time
+from common.utils import format_moves_count, format_time
 from core.data.plot_words_list import PlotWordsList
 from core.data.random_words_list import RandomWordsList
 from core.screens.game import GameScreen
 from core.screens.statistics import StatisticsScreen
+from ui.objects.level_item import Ui_LevelItem
 
 
-class LevelItem(QWidget):
+class LevelItem(QWidget, Ui_LevelItem):
     level_word_label: QLabel
     best_moves_count_label: QLabel
     level_num_label: QLabel
@@ -26,7 +26,7 @@ class LevelItem(QWidget):
     def __init__(self, level_num, level_word, level_best_moves, level_best_time,
                  game_mode):
         super().__init__()
-        uic.loadUi(path_to_ui('objects/level_item'), self)
+        self.setupUi(self)
         self.init(level_num, level_word, level_best_moves, level_best_time, game_mode)
 
     def init(self, level_num, level_word, level_best_moves, level_best_time, game_mode):

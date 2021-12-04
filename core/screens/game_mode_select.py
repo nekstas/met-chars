@@ -4,13 +4,13 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton
 
 from common import g
-from common.utils import path_to_ui
 from core.objects.game_mode_item import GameModeItem
 from core.screens.plot_level_select import PlotLevelSelectScreen
 from core.screens.random_level_select import RandomLevelSelectScreen
+from ui.screens.game_mode_select import Ui_GameModeSelectScreen
 
 
-class GameModeSelectScreen(QWidget):
+class GameModeSelectScreen(QWidget, Ui_GameModeSelectScreen):
     game_modes_layout: QVBoxLayout
     gm_plot: GameModeItem
     gm_random: GameModeItem
@@ -18,7 +18,7 @@ class GameModeSelectScreen(QWidget):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/game_mode_select'), self)
+        self.setupUi(self)
         self.init()
 
     def init(self):

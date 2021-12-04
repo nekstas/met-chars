@@ -3,22 +3,22 @@
 import os
 import random
 
-from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
 from common import g
-from common.utils import path_to_ui, format_moves_count, format_time, path_to_program_data
+from common.utils import format_moves_count, format_time, path_to_program_data
 from core.data.words_list import WordsList
 from core.screens.statistics import StatisticsScreen
+from ui.screens.between_levels import Ui_BetweenLevelsScreen
 
 MEME_MAX_WIDTH = 340
 MEME_MAX_HEIGHT = 369
 MEMES_COUNT = len(os.listdir(path_to_program_data('memes/')))
 
 
-class BetweenLevelsScreen(QWidget):
+class BetweenLevelsScreen(QWidget, Ui_BetweenLevelsScreen):
     moves_count_label: QLabel
     time_label: QLabel
     level_num_label: QLabel
@@ -40,7 +40,7 @@ class BetweenLevelsScreen(QWidget):
     def __init__(self, words_list, level_num, game_mode, moves_count, time_seconds,
                  meme_i=-1):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/between_levels'), self)
+        self.setupUi(self)
         self.init(words_list, level_num, game_mode, moves_count, time_seconds, meme_i)
 
     def init(self, words_list, level_num, game_mode, moves_count, time_seconds, meme_i):

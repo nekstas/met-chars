@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
-from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
 from common import g
 from common.save import save_player
 from common.sql import SQL
-from common.utils import path_to_ui
+from ui.objects.player_item import Ui_PlayerItem
 
 
-class PlayerItem(QWidget):
+class PlayerItem(QWidget, Ui_PlayerItem):
     player_id: int
     player_name: str
     player_rnd: int
@@ -22,7 +21,7 @@ class PlayerItem(QWidget):
 
     def __init__(self, player_id, player_name, player_rnd):
         super().__init__()
-        uic.loadUi(path_to_ui('objects/player_item'), self)
+        self.setupUi(self)
         self.init(player_id, player_name, player_rnd)
 
     def update_view(self):

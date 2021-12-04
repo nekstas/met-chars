@@ -2,16 +2,15 @@
 # Автор: Некрасов Станислав
 from __future__ import annotations
 
-from PyQt5 import uic
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QPushButton, QWidget
 
-from common.utils import path_to_ui
 from core.other.cell_b import CellB
 from core.other.cell_s import CellS
+from ui.objects.cell import Ui_Cell
 
 
-class Cell(QWidget):
+class Cell(QWidget, Ui_Cell):
     button: QPushButton
 
     code: int
@@ -20,7 +19,7 @@ class Cell(QWidget):
 
     def __init__(self, code, on_clicked=None):
         super().__init__()
-        uic.loadUi(path_to_ui('objects/cell'), self)
+        self.setupUi(self)
         self.init(code, on_clicked)
 
     def init(self, code, on_clicked):

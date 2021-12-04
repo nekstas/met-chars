@@ -2,13 +2,12 @@
 # Автор: Некрасов Станислав
 from typing import Callable, Optional
 
-from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
-from common.utils import path_to_ui
+from ui.objects.game_mode_item import Ui_GameModeItem
 
 
-class GameModeItem(QWidget):
+class GameModeItem(QWidget, Ui_GameModeItem):
     on_select: Optional[Callable]
 
     description_label: QLabel
@@ -16,7 +15,7 @@ class GameModeItem(QWidget):
 
     def __init__(self, title, description, on_select=None):
         super().__init__()
-        uic.loadUi(path_to_ui('objects/game_mode_item'), self)
+        self.setupUi(self)
         self.init(title, description, on_select)
 
     def init(self, title, description, on_select):

@@ -2,16 +2,16 @@
 # Автор: Некрасов Станислав
 from typing import Tuple, Any
 
-from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QLabel, QTableWidget, QRadioButton, \
     QCheckBox, QPushButton, QTableWidgetItem
 
 from common import g
 from common.sql import SQL
-from common.utils import path_to_ui, format_time
+from common.utils import format_time
+from ui.screens.statistics import Ui_StatisticsScreen
 
 
-class StatisticsScreen(QWidget):
+class StatisticsScreen(QWidget, Ui_StatisticsScreen):
     word_label: QLabel
     statistics_table: QTableWidget
     by_moves_rb: QRadioButton
@@ -28,7 +28,7 @@ class StatisticsScreen(QWidget):
 
     def __init__(self, game_mode, word, back_screen, *back_args):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/statistics'), self)
+        self.setupUi(self)
         self.init(game_mode, word, back_screen, back_args)
 
     def render_statistics(self):

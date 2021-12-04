@@ -2,7 +2,6 @@
 # Автор: Некрасов Станислав
 from core.other.cell_b import CellB
 
-PATH_TO_UI = './ui'
 PATH_TO_USER_DATA = './user_data'
 PATH_TO_PROGRAM_DATA = './data'
 DB_FILE = 'db.sqlite'

@@ -2,22 +2,22 @@
 # Автор: Некрасов Станислав
 from typing import Optional
 
-from PyQt5 import uic
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel, QPushButton
 
 from common import g
 from common.consts import CELLS_V_COUNT, CELLS_H_COUNT, BASE_BOARD_CELLS
 from common.sql import SQL
-from common.utils import path_to_ui, format_time, format_moves_count, get_plot_board
+from common.utils import format_time, format_moves_count, get_plot_board
 from core.data.plot_words_list import PlotWordsList
 from core.data.words_list import WordsList
 from core.objects.cell import Cell, CellB
 from core.screens.between_levels_screen import BetweenLevelsScreen
 from core.screens.game_over import GameOverScreen
+from ui.screens.game import Ui_GameScreen
 
 
-class GameScreen(QWidget):
+class GameScreen(QWidget, Ui_GameScreen):
     cells_layout: QGridLayout
     main_display: QTextBrowser
     sub_display: QLabel
@@ -45,7 +45,7 @@ class GameScreen(QWidget):
 
     def __init__(self, words_list, level_num):
         super().__init__()
-        uic.loadUi(path_to_ui('screens/game'), self)
+        self.setupUi(self)
         self.init(words_list, level_num)
 
     def save_level_completed(self):

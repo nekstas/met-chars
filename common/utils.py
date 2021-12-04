@@ -4,11 +4,7 @@ import csv
 
 from pymorphy2 import MorphAnalyzer
 
-from common.consts import PATH_TO_UI, PATH_TO_USER_DATA, PATH_TO_PROGRAM_DATA, BASE_BOARD_CELLS
-
-
-def path_to_ui(path):
-    return f'{PATH_TO_UI}/{path}.ui'
+from common.consts import PATH_TO_USER_DATA, PATH_TO_PROGRAM_DATA, BASE_BOARD_CELLS
 
 
 def path_to_user_data(path):
