@@ -7,23 +7,14 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel, QPushButton
 
 from common import g
-from common.consts import CELLS_V_COUNT, CELLS_H_COUNT
+from common.consts import CELLS_V_COUNT, CELLS_H_COUNT, BASE_BOARD_CELLS
 from common.sql import SQL
-from common.utils import path_to_ui, format_time, format_moves_count
+from common.utils import path_to_ui, format_time, format_moves_count, get_plot_board
 from core.data.plot_words_list import PlotWordsList
 from core.data.words_list import WordsList
 from core.objects.cell import Cell, CellB
 from core.screens.between_levels_screen import BetweenLevelsScreen
 from core.screens.game_over import GameOverScreen
-
-
-RANDOM_START_CELLS = [
-    [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
-    [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x289 | CellB.ENABLED],
-    [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x26a | CellB.ENABLED],
-    [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x205 | CellB.ENABLED],
-    [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED]
-]
 
 
 class GameScreen(QWidget):
@@ -154,26 +145,9 @@ class GameScreen(QWidget):
 
     def create_board(self):
         if self.game_mode == 'r':
-            cells = RANDOM_START_CELLS
+            cells = BASE_BOARD_CELLS
         else:
-            cells = [
-                [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
-                [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x289 | CellB.ENABLED],
-                [0, 0, 0, 0x26a | CellB.ENABLED],
-                [CellB.ENABLED, CellB.ENABLED, CellB.ENABLED, 0x205 | CellB.ENABLED],
-                [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
-            ]
-
-        cells = RANDOM_START_CELLS
-        # cells_contents = [
-        #     [0x401 | CellB.ENABLED, 0x401 | CellB.ENABLED, CellB.ENABLED, 0x276 | CellB.ENABLED],
-        #     [0, 0, 0, 0x289 | CellB.ENABLED],
-        #     [0x601 | CellB.ENABLED, 0x602 | CellB.ENABLED, 0, 0x26a | CellB.ENABLED],
-        #     [0, 0x4ff, 0, 0x205 | CellB.ENABLED],
-        #     [0x201 | CellB.ENABLED, 0x202 | CellB.ENABLED, 0x203 | CellB.ENABLED, 0x244 | CellB.ENABLED],
-        # ]
-
-        # TODO: сделать разное стартовое игровое поле для разных уровней из сюжетного режима
+            cells = get_plot_board(self.level_num)
 
         for i in range(CELLS_V_COUNT):
             for j in range(CELLS_H_COUNT):
