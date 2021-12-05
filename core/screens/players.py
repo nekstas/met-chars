@@ -20,12 +20,9 @@ class PlayersScreen(QWidget):
     players_layout: QVBoxLayout
 
     def __init__(self):
-        try:
-            super().__init__()
-            uic.loadUi(path_to_ui('screens/players'), self)
-            self.init()
-        except Exception as e:
-            print(e)
+        super().__init__()
+        uic.loadUi(path_to_ui('screens/players'), self)
+        self.init()
 
     def init(self):
         self.create_player_btn.clicked.connect(self.create_player)
