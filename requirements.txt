@@ -2,4 +2,3 @@ PyQt5
 PyQt5-stubs
 pyqt5-tools
 PyMorphy2
-PyMorphy2-dicts-ru
