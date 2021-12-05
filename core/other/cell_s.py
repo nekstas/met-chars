@@ -15,5 +15,3 @@ class CellS:
     background: #999cff;
 }'''
     DISABLED = '''background-color: #d3514b; }'''
-
-# Что за программа, что делает, схема БД, если есть
