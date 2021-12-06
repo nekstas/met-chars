@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Автор: Некрасов Станислав
 from common import g
-from common.sql import SQL
 from core.data.plot_words_list import PlotWordsList
 from core.screens.game import GameScreen
 from core.screens.level_select import LevelSelectScreen
